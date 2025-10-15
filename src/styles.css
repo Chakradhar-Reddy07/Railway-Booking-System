@@ -1,0 +1,94 @@
+/* styles.css - light/dark theme using data-theme attribute */
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --border: #e6e9ef;
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --card: #0f1724;
+  --text: #e6eef8;
+  --muted: #9aa8bd;
+  --accent: #60a5fa;
+  --border: #1f2937;
+}
+
+* { box-sizing: border-box; }
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg), #ffffff);
+  color: var(--text);
+}
+
+/* layout */
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 20px;
+  border-bottom:1px solid var(--border);
+  background: var(--card);
+}
+.topbar .brand { font-weight:700; font-size:20px; color:var(--accent); }
+.topbar nav a { margin:0 8px; text-decoration:none; color:var(--muted); }
+.topbar .actions { display:flex; gap:8px; }
+
+.main { padding:20px; }
+
+/* cards */
+.card {
+  background: var(--card);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* form/layout */
+.auth-page {
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.auth-page .card { width:380px; max-width:95%; }
+.auth-page input, .auth-page select, .card input, .card select {
+  width:100%;
+  margin:8px 0;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+}
+
+.btn {
+  background: linear-gradient(90deg,var(--accent), #1e88e5);
+  color:white;
+  border:0;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.btn.tiny { padding:6px 8px; font-size:0.85rem; }
+.btn.small { padding:6px 8px; }
+
+/* search and list */
+.search-form { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.train-list .train { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; padding:8px; border-radius:8px; }
+
+/* small helpers */
+.row { display:flex; gap:8px; align-items:center; font-size:0.95rem; color:var(--muted); }
+.error { color:#b91c1c; background: #ffe6e6; padding:6px; border-radius:6px; margin-bottom:8px; }
+
+/* responsive */
+@media (max-width:700px) {
+  .topbar nav { display:none; }
+}
