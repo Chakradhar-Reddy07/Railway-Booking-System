@@ -1,0 +1,136 @@
+/* Background styling */
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  background: url(../images/railway-bg.jpg) no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+/* Overlay to improve text contrast */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+/* Central box styling */
+.login-box {
+  position: relative;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2.5rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  transition: all 0.4s ease-in-out;
+}
+
+.login-box:hover {
+  transform: scale(1.02);
+}
+
+/* Titles */
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2b2b52;
+  margin-bottom: 0.3rem;
+}
+
+.login-subtitle {
+  color: #4c4c6d;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+}
+
+/* Error message */
+.error-msg {
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Links */
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* 🌙 Dark Theme Support */
+@media (prefers-color-scheme: dark) {
+  .login-box {
+    background: rgba(30, 41, 59, 0.9);
+    color: #e2e8f0;
+  }
+  .login-title {
+    color: #93c5fd;
+  }
+  .login-subtitle {
+    color: #cbd5e1;
+  }
+  .input-field {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #475569;
+    color: #e2e8f0;
+  }
+  .input-field::placeholder {
+    color: #94a3b8;
+  }
+  .login-btn {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+}

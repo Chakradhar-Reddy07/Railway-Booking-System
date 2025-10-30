@@ -3,30 +3,63 @@ const router = express.Router();
 const pool = require('../config/db');
 
 // Available trains with seat filter
+// ✅ GET Available Trains between two stations on selected date (train start date)
 router.get('/available', async (req, res) => {
   try {
-    const { from, to, class_type } = req.query;
- console.log('Query params:', from, to, class_type);
-    const sql = `
-      SELECT DISTINCT t.train_id, t.train_name, rs_from.seq_no as from_seq, rs_to.seq_no as to_seq,
-             si.seat_id, si.class_type, si.available_seats, si.coach_no, si.total_seats
-      FROM trains t
-      JOIN route_stations rs_from ON rs_from.train_id = t.train_id
-      JOIN route_stations rs_to ON rs_to.train_id = t.train_id
-      LEFT JOIN seat_inventory si 
-        ON si.train_id = t.train_id AND si.class_type = ?
-      WHERE rs_from.station_id = ? AND rs_to.station_id = ? AND rs_from.seq_no < rs_to.seq_no
-        AND si.available_seats > 0
-    `;
+    const { from, to, date } = req.query;
+    if (!from || !to || !date)
+      return res.status(400).json({ message: 'from, to, and date are required' });
 
-    const [rows] = await pool.query(sql, [class_type, from, to]);
-     console.log('Result rows:', rows);
+    // Convert date to weekday (for route_stations)
+    const days = ['sun','mon','tue','wed','thu','fri','sat'];
+    const weekday = days[new Date(date).getDay()];
+
+    const sql =  `
+      SELECT 
+          t.train_id,
+          t.train_name,
+          si.class_type,
+          rs_from.departure_time AS from_departure,
+          rs_to.arrival_time AS to_arrival,
+          COUNT(CASE WHEN ss.availability_status = 'AVAILABLE' THEN 1 END) AS available_seats,
+          COUNT(ss.seat_no) AS total_seats
+      FROM trains t
+      JOIN route_stations rs_from 
+          ON rs_from.train_id = t.train_id
+      JOIN route_stations rs_to 
+          ON rs_to.train_id = t.train_id
+      JOIN seat_inventory si 
+          ON si.train_id = t.train_id
+      LEFT JOIN seat_status ss 
+          ON ss.train_id = t.train_id
+          AND ss.class_type = si.class_type
+          AND ss.coach_no = si.coach_no
+          AND ss.from_seq_no < rs_to.seq_no
+          AND ss.to_seq_no > rs_from.seq_no
+          AND ss.travel_date = (
+              SELECT MIN(travel_date)
+              FROM seat_status
+              WHERE train_id = t.train_id
+                AND travel_date <= ?
+          )
+      WHERE 
+          rs_from.station_id = ?
+          AND rs_to.station_id = ?
+          AND rs_from.seq_no < rs_to.seq_no
+          AND (rs_from.${weekday} = 1 OR rs_to.${weekday} = 1)
+      GROUP BY 
+          t.train_id, t.train_name, si.class_type, rs_from.departure_time, rs_to.arrival_time
+      ORDER BY 
+          t.train_name;
+    `;
+    const [rows] = await pool.query(sql, [date, from, to]);
     res.json(rows);
   } catch (err) {
-    console.error(err);
+    console.error('Error fetching available trains:', err);
     res.status(500).json({ message: 'Error fetching available trains' });
   }
 });
+
 
 // Train details
 router.get('/:id', async (req, res) => {
