@@ -6,9 +6,9 @@ import Background3D from '../components/Background3D'; // ⬅️ adjust path as 
 
 export default function AvailableTrains() {
   const [query, setQuery] = useState({
-    from: 'S_HYD',
-    to: 'S_NDL',
-    date: '2025-11-20',
+    from: 'S_BHP',
+    to: 'S_HYD',
+    date: '2025-11-01',
     class_type: '3A'
   });
   const [results, setResults] = useState([]);
