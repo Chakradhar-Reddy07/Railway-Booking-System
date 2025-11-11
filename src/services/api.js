@@ -16,15 +16,10 @@ export async function login(data) {
 }
 
 // Trains
-
-export async function getAvailableTrains({ from, to, date }) {
-  const res = await axios.get(`${API_BASE}/trains/available`, {
-    params: { from, to, date }, // sends ?from=BHP&to=HYD&date=01-11-2025
-  });
+export async function getAvailableTrains(params) {
+  const res = await axios.get(`${API_BASE}/trains/available`, { params });
   return res.data;
 }
-
-
 
 export async function getTrain(id) {
   const res = await axios.get(`${API_BASE}/trains/${encodeURIComponent(id)}`);

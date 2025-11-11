@@ -6,9 +6,10 @@ import Background3D from '../components/Background3D'; // ⬅️ adjust path as 
 
 export default function AvailableTrains() {
   const [query, setQuery] = useState({
-    from: 'S_BHP',
-    to: 'S_HYD',
-    date: '2025-11-01'
+    from: 'S_HYD',
+    to: 'S_NDL',
+    date: '2025-11-20',
+    class_type: '3A'
   });
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -72,6 +73,15 @@ export default function AvailableTrains() {
             onChange={(e) => setQuery({ ...query, date: e.target.value })}
             className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/90 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 outline-none w-40"
           />
+          <select
+            value={query.class_type}
+            onChange={(e) => setQuery({ ...query, class_type: e.target.value })}
+            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/90 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 outline-none w-40"
+          >
+            <option value="SL">SL</option>
+            <option value="3A">3A</option>
+            <option value="2A">2A</option>
+          </select>
           <button
             type="submit"
             className="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-6 shadow-lg transition-all"
@@ -87,39 +97,27 @@ export default function AvailableTrains() {
             <div className="text-center text-gray-600 dark:text-gray-300">No trains found</div>
           )}
 
-    {results.map((r, index) => (
-          <motion.div
-            key={`${r.train_id}-${r.class_type}-${index}`}
-            className="p-5 bg-white/80 dark:bg-gray-900/70 rounded-xl shadow-xl flex justify-between items-center hover:scale-[1.02] transition-transform"
-            whileHover={{ scale: 1.02 }}
-          >
-            <div>
-              <strong className="text-lg text-gray-800 dark:text-white">
-                {r.train_name}
-              </strong>
-              <div className="text-gray-600 dark:text-gray-300">
-                From {r.from_departure} → To {r.to_arrival}
-              </div>
-              <div className="text-gray-600 dark:text-gray-300">
-                Class: <span className="font-semibold">{r.class_type}</span>
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Seats: {r.available_seats}/{r.total_seats}
-              </div>
-            </div>
-
-            <Link
-              to={`/home/confirm/${encodeURIComponent(r.train_id)}?class=${r.class_type}&from=${query.from}&to=${query.to}&date=${query.date}`}
-              className={`btn font-semibold rounded-lg px-4 py-2 shadow-lg transition-all ${
-                r.available_seats > 0
-                  ? 'bg-green-500 hover:bg-green-600 text-white'
-                  : 'bg-gray-400 text-white cursor-not-allowed'
-              }`}
+          {results.map((r) => (
+            <motion.div
+              key={r.train_id + r.seat_id}
+              className="p-4 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-xl flex justify-between items-center hover:scale-[1.03] transition-transform text-gray-800 dark:text-gray-100 backdrop-blur-sm"
+              whileHover={{ scale: 1.03 }}
             >
-              {r.available_seats > 0 ? 'Book' : 'Full'}
-            </Link>
-          </motion.div>
-        ))}
+              <div>
+                <strong className="text-lg text-gray-900 dark:text-gray-100">{r.train_name}</strong>
+                <div className="text-gray-600 dark:text-gray-300">
+                  Class: {r.class_type} • Avl: {r.available_seats}
+                </div>
+                <div className="text-gray-500 dark:text-gray-400">Coach: {r.coach_no}</div>
+              </div>
+              <Link
+                to={`/home/confirm/${encodeURIComponent(r.train_id)}`}
+                className="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-4 py-2 shadow-lg"
+              >
+                Book
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

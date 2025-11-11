@@ -10,11 +10,11 @@ router.get('/available', async (req, res) => {
     if (!from || !to || !date)
       return res.status(400).json({ message: 'from, to, and date are required' });
 
-    // Convert date to weekday for route_stations
+    // Convert date to weekday (for route_stations)
     const days = ['sun','mon','tue','wed','thu','fri','sat'];
     const weekday = days[new Date(date).getDay()];
 
-    const sql = `
+    const sql =  `
       SELECT 
           t.train_id,
           t.train_name,
@@ -34,14 +34,14 @@ router.get('/available', async (req, res) => {
           ON ss.train_id = t.train_id
           AND ss.class_type = si.class_type
           AND ss.coach_no = si.coach_no
-          AND ss.from_seq_no <= rs_from.seq_no
-          AND ss.to_seq_no >= rs_to.seq_no
-          AND ss.travel_date = COALESCE((
-              SELECT MAX(travel_date)
+          AND ss.from_seq_no < rs_to.seq_no
+          AND ss.to_seq_no > rs_from.seq_no
+          AND ss.travel_date = (
+              SELECT MIN(travel_date)
               FROM seat_status
               WHERE train_id = t.train_id
-                AND travel_date <= STR_TO_DATE(?, '%d-%m-%Y')
-          ), STR_TO_DATE(?, '%d-%m-%Y'))
+                AND travel_date <= ?
+          )
       WHERE 
           rs_from.station_id = ?
           AND rs_to.station_id = ?
@@ -52,12 +52,8 @@ router.get('/available', async (req, res) => {
       ORDER BY 
           t.train_name;
     `;
-
-    const [rows] = await pool.query(sql, [date, date, from, to]);
-    console.log(rows); // Debug: check what comes from SQL
-
+    const [rows] = await pool.query(sql, [date, from, to]);
     res.json(rows);
-
   } catch (err) {
     console.error('Error fetching available trains:', err);
     res.status(500).json({ message: 'Error fetching available trains' });
