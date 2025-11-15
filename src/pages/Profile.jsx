@@ -15,10 +15,10 @@ export default function Profile() {
     load();
   }, []);
 
-  if (!p) return <div className="page text-center text-indigo-500">Loading profile...</div>;
+  if (!p) return <div className="text-center text-indigo-500">Loading profile...</div>;
 
   return (
-    <div className="page flex justify-center p-6">
+    <div className="flex justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

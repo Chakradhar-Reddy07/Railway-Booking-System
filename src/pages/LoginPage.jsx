@@ -12,15 +12,20 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   async function submit(e) {
-    e.preventDefault();
-    try {
-      const res = await login({ username, password });
-      saveToken(res.token);
-      navigate('/home');
-    } catch (err) {
-      setErr(err.response?.data?.message || 'Login failed');
-    }
+  e.preventDefault();
+  try {
+    const res = await login({ username, password });
+
+    console.log("🔥 LOGIN RESPONSE FROM BACKEND:", res); // <-- ADD THIS
+
+    saveToken(res.token);  // this is failing because res.token is probably undefined
+    navigate('/home');
+  } catch (err) {
+    console.log("🔥 LOGIN ERROR:", err);  // <-- debug
+    setErr(err.response?.data?.message || 'Login failed');
   }
+}
+
 
   return (
     <div className="login-page">
