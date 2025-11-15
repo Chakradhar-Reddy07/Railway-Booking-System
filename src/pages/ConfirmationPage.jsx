@@ -4,16 +4,16 @@ import { getTrain, createBooking } from '../services/api';
 import { motion } from 'framer-motion';
 
 export default function ConfirmationPage() {
-  const { id } = useParams();
+  const { id ,from,to,traveldate,travelclass} = useParams();
   const nav = useNavigate();
 
   const [train, setTrain] = useState(null);
   const [routeStations, setRouteStations] = useState([]);
   const [passengers, setPassengers] = useState([{ name: '', age: '' }]);
-  const [classType, setClassType] = useState('3A');
-  const [boarding, setBoarding] = useState('');
-  const [departure, setDeparture] = useState('');
-  const [date, setDate] = useState('');
+  const [classType, setClassType] = useState(travelclass);
+  const [boarding, setBoarding] = useState(from);
+  const [departure, setDeparture] = useState(to);
+  const [date, setDate] = useState(traveldate);
   const [loading, setLoading] = useState(false);
 
 
@@ -142,70 +142,30 @@ export default function ConfirmationPage() {
           {train.train_name}
         </h2>
 
-        <div className="text-gray-700 dark:text-gray-300 mb-4">
+        <div className="font-semibold dark:text-gray-300 mb-4">
           Train ID: {train.train_id}
         </div>
 
         <form onSubmit={submit} className="space-y-4">
 
           {/* Travel date */}
-          <div className="flex flex-col">
-            <label className="font-semibold mb-1">Travel Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-              className="p-2 rounded-lg border dark:border-gray-600 outline-none"
-            />
+          <div className="flex flex-col font-semibold mb-1">
+            Travel Date :{date}
           </div>
 
           {/* Class type */}
-          <div className="flex flex-col">
-            <label className="font-semibold mb-1">Class</label>
-            <select
-              value={classType}
-              onChange={(e) => setClassType(e.target.value)}
-              className="p-2 rounded-lg border dark:border-gray-600 outline-none"
-            >
-              <option>3A</option>
-              <option>2A</option>
-              <option>SL</option>
-            </select>
+          <div className="flex flex-col font-semibold mb-1">
+            Class:{classType}
           </div>
 
           {/* Boarding station */}
-          <div className="flex flex-col">
-            <label className="font-semibold mb-1">Boarding Station</label>
-            <select
-              value={boarding}
-              onChange={(e) => setBoarding(e.target.value)}
-              required
-              className="p-2 rounded-lg border dark:border-gray-600 outline-none"
-            >
-              {routeStations.map(s => (
-                <option key={s.station_id} value={s.station_id}>
-                  {s.station_name} ({s.city})
-                </option>
-              ))}
-            </select>
+          <div className="flex flex-col font-semibold mb-1">
+            Boarding Station : {boarding}
           </div>
 
           {/* Destination station (filtered) */}
-          <div className="flex flex-col">
-            <label className="font-semibold mb-1">Destination Station</label>
-            <select
-              value={departure}
-              onChange={(e) => setDeparture(e.target.value)}
-              required
-              className="p-2 rounded-lg border dark:border-gray-600 outline-none"
-            >
-              {filteredDestinationStations.map(s => (
-                <option key={s.station_id} value={s.station_id}>
-                  {s.station_name} ({s.city})
-                </option>
-              ))}
-            </select>
+          <div className="flex flex-col font-semibold mb-1">
+            Destination Station : {departure}
           </div>
 
           {/* Passengers */}
