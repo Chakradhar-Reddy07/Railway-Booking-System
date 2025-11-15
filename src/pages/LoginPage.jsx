@@ -18,7 +18,7 @@ export default function LoginPage() {
       console.log("🔥 LOGIN RESPONSE FROM BACKEND:", res); // debug
 
       // ✅ Minimal fix: store JWT so profile can be fetched
-      localStorage.setItem('token', res.token);
+      localStorage.setItem('rb_token', res.token);
 
       navigate('/home'); // redirect after login
     } catch (err) {
