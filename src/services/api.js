@@ -56,3 +56,12 @@ export async function profile() {
   })
   .then(res => res.data);
 }
+// 🚅 NEW: Update Profile API function
+export async function updateProfile(data) {
+    // Send the user data to the backend for update. 
+    // The authHeader() ensures the request is authorized.
+    const res = await axios.put(`${API_BASE}/users/profile`, data, { headers: authHeader() });
+    
+    // The backend should return the updated user object
+    return res.data;
+}
