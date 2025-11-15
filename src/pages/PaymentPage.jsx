@@ -1,14 +1,29 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useLocation } from "react-router-dom";
+import { pay } from '../services/api';
+import { useParams } from 'react-router-dom';
 export default function PaymentPage() {
+  const { ticketId } = useParams();
+   const location = useLocation();
+  const amount = location.state?.amount || 0;
   const navigate = useNavigate();
 
-  const handlePay = (e) => {
+const  handlePay = async (e) => {
     e.preventDefault();
-    // placeholder - integrate payment gateway here
-    alert('Payment simulated. Thank you!');
-    navigate('/'); // redirect after simulated payment
+      try {
+        console.log("Processing payment for ticket:", ticketId, "amount:", amount);
+            const res = await pay({
+              ticket_id: ticketId,
+              amount: amount,
+              mode: 'CARD',
+            });
+            alert("Payment successful! Payment ID: " + res.payment_id);
+            navigate('/home/mybookings'); // redirect after payment
+          }
+           catch (err) {
+            console.error("Error loading train:", err);
+          }
   };
 
   return (
@@ -33,7 +48,7 @@ export default function PaymentPage() {
       >
         <h2>Payment</h2>
         <p>
-          Amount: <strong>₹ 0.00</strong>
+          Amount: <strong>{amount}</strong>
         </p>
         <form onSubmit={handlePay}>
           <div style={{ marginBottom: 12 }}>
