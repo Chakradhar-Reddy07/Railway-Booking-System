@@ -15,6 +15,7 @@ router.post('/signup', async (req, res) => {
 
     const [exists] = await pool.query('SELECT 1 FROM users WHERE username = ?', [username]);
     if (exists.length) return res.status(400).json({ message: 'Username already taken' });
+    console.log("🎯 SIGNUP BODY:", req.body); 
 
     const hash = await bcrypt.hash(password, 10);
     const userId = uuidv4();
@@ -71,5 +72,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Login failed' });
   }
 });
+
 
 module.exports = router;
