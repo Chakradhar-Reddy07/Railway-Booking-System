@@ -47,6 +47,12 @@ export async function pay(data) {
 
 // Profile
 export async function profile() {
-  const res = await axios.get(`${API_BASE}/users/profile`, { headers: authHeader() });
-  return res.data;
+  const token = localStorage.getItem('token');
+
+  return axios.get('http://localhost:5000/api/users/profile', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => res.data);
 }

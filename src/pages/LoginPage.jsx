@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/api';
-import { saveToken } from '../services/auth';
 import { motion } from 'framer-motion';
-import './LoginPage.css'; // <-- add this line for styling
+import './LoginPage.css'; // styling
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -12,20 +11,21 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   async function submit(e) {
-  e.preventDefault();
-  try {
-    const res = await login({ username, password });
+    e.preventDefault();
+    try {
+      const res = await login({ username, password });
 
-    console.log("🔥 LOGIN RESPONSE FROM BACKEND:", res); // <-- ADD THIS
+      console.log("🔥 LOGIN RESPONSE FROM BACKEND:", res); // debug
 
-    saveToken(res.token);  // this is failing because res.token is probably undefined
-    navigate('/home');
-  } catch (err) {
-    console.log("🔥 LOGIN ERROR:", err);  // <-- debug
-    setErr(err.response?.data?.message || 'Login failed');
+      // ✅ Minimal fix: store JWT so profile can be fetched
+      localStorage.setItem('token', res.token);
+
+      navigate('/home'); // redirect after login
+    } catch (err) {
+      console.log("🔥 LOGIN ERROR:", err);
+      setErr(err.response?.data?.message || 'Login failed');
+    }
   }
-}
-
 
   return (
     <div className="login-page">

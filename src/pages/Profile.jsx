@@ -8,8 +8,8 @@ export default function Profile() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await profile();
-        setP(res);
+        const data = await profile();
+        setP(data);
       } catch (err) { console.error(err); }
     }
     load();
