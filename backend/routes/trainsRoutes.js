@@ -7,6 +7,7 @@ const pool = require('../config/db');
 router.get('/available', async (req, res) => {
   try {
     const { from, to, date } = req.query;
+    console.log('Available trains request params:', req.query);
     if (!from || !to || !date)
       return res.status(400).json({ message: 'from, to, and date are required' });
 
@@ -53,6 +54,7 @@ router.get('/available', async (req, res) => {
           t.train_name;
     `;
     const [rows] = await pool.query(sql, [date, from, to]);
+    console.log('Available trains query result:', rows);
     res.json(rows);
   } catch (err) {
     console.error('Error fetching available trains:', err);

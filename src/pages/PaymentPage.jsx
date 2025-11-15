@@ -1,55 +1,58 @@
-import React, { useState } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { pay } from '../services/api';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentPage() {
-  const { ticketId } = useParams();
-  const location = useLocation();
-  const nav = useNavigate();
-  const [mode, setMode] = useState('CARD');
-  const [amount] = useState(location.state?.amount || 0);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  async function submit(e) {
+  const handlePay = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await pay({ ticket_id: ticketId, amount, mode });
-      alert('Payment successful');
-      nav('/mybookings');
-    } catch (err) {
-      console.error(err);
-      alert('Payment failed');
-    } finally { setLoading(false); }
-  }
+    // placeholder - integrate payment gateway here
+    alert('Payment simulated. Thank you!');
+    navigate('/'); // redirect after simulated payment
+  };
 
   return (
-    <div className="page flex justify-center p-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="card bg-white/90 dark:bg-gray-900/70 p-6 rounded-2xl shadow-2xl w-full max-w-md"
+    <div
+      style={{
+        minHeight: '80vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 600,
+          width: '100%',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+          padding: 24,
+          borderRadius: 8,
+          background: '#fff',
+        }}
       >
-        <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Payment</h2>
-        <div className="mb-4 text-gray-700 dark:text-gray-300">Ticket ID: {ticketId}</div>
-        <div className="mb-6 text-lg font-semibold">Amount: ₹ {amount}</div>
-
-        <form onSubmit={submit} className="space-y-4">
-          <div className="flex flex-col">
-            <label className="font-semibold mb-1">Payment Mode</label>
-            <select value={mode} onChange={e => setMode(e.target.value)} className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="CARD">Card</option>
-              <option value="UPI">UPI</option>
-              <option value="NETBANKING">Netbanking</option>
-            </select>
+        <h2>Payment</h2>
+        <p>
+          Amount: <strong>₹ 0.00</strong>
+        </p>
+        <form onSubmit={handlePay}>
+          <div style={{ marginBottom: 12 }}>
+            <label>Card number</label>
+            <input
+              required
+              style={{ width: '100%', padding: 8 }}
+              placeholder="4242 4242 4242 4242"
+            />
           </div>
-
-          <button type="submit" disabled={loading} className="btn w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg">
-            {loading ? 'Processing...' : 'Pay Now'}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input required style={{ flex: 1, padding: 8 }} placeholder="MM/YY" />
+            <input required style={{ flex: 1, padding: 8 }} placeholder="CVC" />
+          </div>
+          <button type="submit" style={{ marginTop: 12, padding: '10px 16px' }}>
+            Pay
           </button>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }

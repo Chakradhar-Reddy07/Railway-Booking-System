@@ -6,11 +6,13 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Auth
 export async function signup(data) {
+  console.log("Signup data:", data);
   const res = await axios.post(`${API_BASE}/auth/signup`, data);
   return res.data;
 }
 
 export async function login(data) {
+  console.log("Login data:", data);
   const res = await axios.post(`${API_BASE}/auth/login`, data);
   return res.data;
 }

@@ -8,8 +8,7 @@ export default function AvailableTrains() {
   const [query, setQuery] = useState({
     from: 'S_BHP',
     to: 'S_HYD',
-    date: '2025-11-01',
-    class_type: '3A'
+    date: '2025-11-01'
   });
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,15 +72,7 @@ export default function AvailableTrains() {
             onChange={(e) => setQuery({ ...query, date: e.target.value })}
             className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/90 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 outline-none w-40"
           />
-          <select
-            value={query.class_type}
-            onChange={(e) => setQuery({ ...query, class_type: e.target.value })}
-            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/90 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 outline-none w-40"
-          >
-            <option value="SL">SL</option>
-            <option value="3A">3A</option>
-            <option value="2A">2A</option>
-          </select>
+         
           <button
             type="submit"
             className="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-6 shadow-lg transition-all"
@@ -99,7 +90,7 @@ export default function AvailableTrains() {
 
           {results.map((r) => (
             <motion.div
-              key={r.train_id + r.seat_id}
+             key={`${r.train_id}-${r.class_type}`}
               className="p-4 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-xl flex justify-between items-center hover:scale-[1.03] transition-transform text-gray-800 dark:text-gray-100 backdrop-blur-sm"
               whileHover={{ scale: 1.03 }}
             >
@@ -108,7 +99,7 @@ export default function AvailableTrains() {
                 <div className="text-gray-600 dark:text-gray-300">
                   Class: {r.class_type} • Avl: {r.available_seats}
                 </div>
-                <div className="text-gray-500 dark:text-gray-400">Coach: {r.coach_no}</div>
+
               </div>
               <Link
                 to={`/home/confirm/${encodeURIComponent(r.train_id)}`}
