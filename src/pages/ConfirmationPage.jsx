@@ -22,6 +22,7 @@ export default function ConfirmationPage() {
     async function loadTrain() {
       try {
         const res = await getTrain(id);
+        console.log("Loaded train:", res);
         setTrain(res.train);
 
         if (Array.isArray(res.route)) {
@@ -90,7 +91,7 @@ export default function ConfirmationPage() {
 
     try {
       const res = await createBooking(payload);
-
+console.log("Booking created:", res);
       alert("Booking created!");
       nav(`/home/payment/${encodeURIComponent(res.ticket_id)}`, {
         state: { amount: res.total_amount },
