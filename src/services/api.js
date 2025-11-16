@@ -47,15 +47,12 @@ export async function pay(data) {
 
 // Profile
 export async function profile() {
-  const token = localStorage.getItem('token');
-
-  return axios.get('http://localhost:5000/api/users/profile', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  .then(res => res.data);
+  return axios.get(`${API_BASE}/users/profile`, {
+    headers: authHeader()
+  }).then(res => res.data);
 }
+
+
 // 🚅 NEW: Update Profile API function
 export async function updateProfile(data) {
     // Send the user data to the backend for update. 

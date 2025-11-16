@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getAvailableTrains } from '../services/api';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Background3D from '../components/Background3D'; // ⬅️ adjust path as needed
+//import Background3D from '../components/Background3D'; // ⬅️ adjust path as needed
 
 export default function AvailableTrains() {
   const [query, setQuery] = useState({
@@ -33,7 +33,7 @@ export default function AvailableTrains() {
     <div className="relative min-h-screen flex flex-col items-center justify-start py-10 px-6 overflow-hidden">
       {/* 🎥 3D Background Layer */}
       <div className="absolute inset-0 z-0">
-        <Background3D />
+         {/* <Background3D /> */}
       </div>
 
       {/* 🌟 Foreground Content */}

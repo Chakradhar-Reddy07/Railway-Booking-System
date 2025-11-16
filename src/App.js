@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
-import Background3D from './components/Background3D';
+//import Background3D from './components/Background3D';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ForgotPassword from './pages/ForgotPassword';
@@ -47,7 +47,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="relative min-h-screen w-full">
-        <Background3D />
+        {/* <Background3D /> */}
         <div className="relative z-10">
           <AnimatedRoutes setTheme={setTheme} theme={theme} />
         </div>
