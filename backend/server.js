@@ -12,12 +12,16 @@ const trainsRoutes = require('./routes/trainsRoutes');
 const bookingsRoutes = require('./routes/bookingsRoutes');
 const paymentsRoutes = require('./routes/paymentsRoutes');
 const usersRoutes = require('./routes/usersRoutes');
+const ticketsRoutes = require('./routes/ticketsRoutes');
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/trains', trainsRoutes);
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/tickets', ticketsRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=> console.log(`Server running on port ${PORT}`));

@@ -12,6 +12,7 @@ import ConfirmationPage from './pages/ConfirmationPage';
 import PaymentPage from './pages/PaymentPage';
 import MyBookings from './pages/MyBookings';
 import Profile from './pages/Profile';
+import TicketsPage from './pages/TicketsPage';
 
 function AnimatedRoutes({ setTheme, theme }) {
   const location = useLocation();
@@ -26,6 +27,7 @@ function AnimatedRoutes({ setTheme, theme }) {
           <Route path="trains" element={<AvailableTrains />} />
           <Route path="confirm/:id/:from/:to/:traveldate/:travelclass" element={<ConfirmationPage />} />
           <Route path="payment/:ticketId" element={<PaymentPage />} />
+          <Route path="ticket/:ticketId" element={<TicketsPage />} />
           <Route path="mybookings" element={<MyBookings />} />
           <Route path="profile" element={<Profile />} />
         </Route>

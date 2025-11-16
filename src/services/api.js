@@ -65,3 +65,12 @@ export async function updateProfile(data) {
     // The backend should return the updated user object
     return res.data;
 }
+
+// Tickets
+export async function getTicket(ticketId) {
+  const res = await axios.get(`${API_BASE}/tickets/${ticketId}`, {
+    headers: authHeader(),
+  });
+  return res.data;
+}
+

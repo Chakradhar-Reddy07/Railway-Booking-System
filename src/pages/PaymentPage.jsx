@@ -19,7 +19,9 @@ const  handlePay = async (e) => {
               mode: 'CARD',
             });
             alert("Payment successful! Payment ID: " + res.payment_id);
-            navigate('/home/mybookings'); // redirect after payment
+            navigate(`/home/ticket/${ticketId}`);
+
+ 
           }
            catch (err) {
             console.error("Error loading train:", err);
