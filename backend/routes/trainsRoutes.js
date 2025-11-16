@@ -200,8 +200,8 @@ router.get('/available', async (req, res) => {
           ON ss.train_id = t.train_id
           AND ss.class_type = si.class_type
           AND ss.coach_no = si.coach_no
-          AND ss.from_seq_no < rs_to.seq_no
-          AND ss.to_seq_no > rs_from.seq_no
+          AND ss.from_seq_no <= rs_from.seq_no
+          AND ss.to_seq_no >= rs_to.seq_no
           AND ss.travel_date = (
               SELECT MIN(travel_date)
               FROM seat_status
