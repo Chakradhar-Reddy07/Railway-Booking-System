@@ -101,12 +101,13 @@ export default function AvailableTrains() {
                 </div>
 
               </div>
-              <Link
-                to={`/home/confirm/${encodeURIComponent(r.train_id)}/${encodeURIComponent(query.from)}/${encodeURIComponent(query.to)}/${encodeURIComponent(query.date)}/${encodeURIComponent(r.class_type)}`}
-                className="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-4 py-2 shadow-lg"
-              >
-                Book
-              </Link>
+             <Link
+  // CORRECTED: Using query parameters (?from=...&to=...)
+  to={`/home/confirm/${encodeURIComponent(r.train_id)}?from=${query.from}&to=${query.to}&date=${query.date}&class=${r.class_type}`}
+  className="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-4 py-2 shadow-lg"
+>
+  Book
+</Link>
             </motion.div>
           ))}
         </div>
