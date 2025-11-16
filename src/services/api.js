@@ -65,3 +65,16 @@ export async function updateProfile(data) {
     // The backend should return the updated user object
     return res.data;
 }
+export async function getSeatStatus(params) {
+  console.log('Fetching seat status with params:', params);
+  const res = await axios.get(`${API_BASE}/trains/seat-status`, { params, headers: authHeader() });
+  return res.data;
+}
+
+// Tickets
+export async function getTicket(ticketId) {
+  const res = await axios.get(`${API_BASE}/tickets/${ticketId}`, {
+    headers: authHeader(),
+  });
+  return res.data;
+}
