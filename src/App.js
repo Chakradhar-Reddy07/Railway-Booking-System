@@ -24,7 +24,7 @@ function AnimatedRoutes({ setTheme, theme }) {
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/home" element={<HomePage setTheme={setTheme} theme={theme}/>}>
           <Route path="trains" element={<AvailableTrains />} />
-          <Route path="confirm/:id/:from/:to/:traveldate/:travelclass" element={<ConfirmationPage />} />
+         <Route path="confirm/:id" element={<ConfirmationPage />} />
           <Route path="payment/:ticketId" element={<PaymentPage />} />
           <Route path="mybookings" element={<MyBookings />} />
           <Route path="profile" element={<Profile />} />
