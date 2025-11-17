@@ -59,11 +59,28 @@ const  handlePay = async (e) => {
               required
               style={{ width: '100%', padding: 8 }}
               placeholder="4242 4242 4242 4242"
-            />
+              pattern="[0-9]{16}"
+              maxLength={16}
+              inputMode="numeric"
+              title="Card number must be exactly 16 digits"
+/>
+
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <input required style={{ flex: 1, padding: 8 }} placeholder="MM/YY" />
-            <input required style={{ flex: 1, padding: 8 }} placeholder="CVC" />
+            <input 
+            required 
+            style={{ flex: 1, padding: 8 }} 
+            placeholder="MM/YY"
+            pattern="[0-9]{2}/[0-9]{2}" 
+            maxLength={5}
+            />
+            <input 
+            required
+            style={{ flex: 1, padding: 8 }} 
+            placeholder="CVC"
+            pattern="[0-9]{3}" 
+            maxLength={3} 
+            />
           </div>
           <button type="submit" style={{ marginTop: 12, padding: '10px 16px' }}>
             Pay
