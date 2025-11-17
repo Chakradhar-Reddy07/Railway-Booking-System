@@ -16,6 +16,7 @@ export default function TicketPage() {
       try {
         const data = await getTicket(ticketId);
         setTicket(data);
+        console.log("TICKET DATA:", data);
       } catch (err) {
         setError("Unable to load ticket.");
       } finally {
@@ -25,7 +26,16 @@ export default function TicketPage() {
 
     fetchData();
   }, [ticketId]);
-
+  const renderSeatDetails = (p) => {
+    if (p.seat_allocated) {
+      const [coach_no, seat_no] = p.seat_allocated.split("-");
+      return (
+        <span className="text-green-600 dark:text-green-400 font-medium ml-auto">
+          {coach_no} - {seat_no}
+        </span>
+      );
+    }
+  };
   // Generate PDF
   const downloadPDF = () => {
     const doc = new jsPDF();
@@ -34,15 +44,18 @@ export default function TicketPage() {
 
     doc.setFontSize(13);
     doc.text(`Ticket ID: ${ticket.ticket_id}`, 20, 40);
-    doc.text(`Passenger: ${ticket.passenger_name}`, 20, 55);
-    doc.text(`Train: ${ticket.train_no} - ${ticket.train_name}`, 20, 70);
-    doc.text(`Date: ${ticket.journey_date}`, 20, 85);
-    doc.text(`From: ${ticket.source}`, 20, 100);
-    doc.text(`To: ${ticket.destination}`, 20, 115);
-    doc.text(`Coach: ${ticket.coach}`, 20, 130);
-    doc.text(`Seat: ${ticket.seat_no}`, 20, 145);
+    doc.text(`Train: ${ticket.train_id} - ${ticket.train_name}`, 20, 70);
+    doc.text(`Date: ${ticket.travel_date}`, 20, 85);
+    doc.text(`From: ${ticket.boarding_station}`, 20, 100);
+    doc.text(`To: ${ticket.departure_station}`, 20, 115);
+    // Passengers
+    doc.text("Passengers:", 20, 130);
+    ticket.passengers.forEach((p, index) => {
+      const yPos = 140 + index * 10;
+      doc.text(`${index + 1}. ${p.name} (${p.age}) - Seat: ${p.seat_allocated || 'N/A'}`, 25, yPos);
+    });
     doc.text(`Status: ${ticket.status}`, 20, 160);
-    doc.text(`Amount Paid: ₹${ticket.amount}`, 20, 175);
+    doc.text(`Amount Paid: ₹${ticket.total_amount}`, 20, 175);
 
     doc.save(`Ticket_${ticket.ticket_id}.pdf`);
   };
@@ -71,15 +84,39 @@ export default function TicketPage() {
         </h2>
 
         <div className="space-y-3 text-gray-800 dark:text-gray-200">
-          <p><strong>Passenger:</strong> {ticket.passenger_name}</p>
-          <p><strong>Train:</strong> {ticket.train_no} — {ticket.train_name}</p>
-          <p><strong>Date:</strong> {ticket.journey_date}</p>
-          <p><strong>From:</strong> {ticket.source}</p>
-          <p><strong>To:</strong> {ticket.destination}</p>
-          <p><strong>Coach:</strong> {ticket.coach}</p>
-          <p><strong>Seat:</strong> {ticket.seat_no}</p>
+
+          <p><strong>Train:</strong> {ticket.train_id} — {ticket.train_name}</p>
+          <p><strong>Date:</strong> {ticket.travel_date}</p>
+          <p><strong>From:</strong> {ticket.boarding_station}</p>
+          <p><strong>To:</strong> {ticket.departure_station}</p>
+            {/* Passengers */}
+              <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="font-semibold mb-2 text-md text-gray-800 dark:text-gray-200">
+                  Passengers ({ticket.passengers?.length || 0})
+                </h4>
+
+                <div className="space-y-1">
+                  {(ticket.passengers || []).map((p, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center text-sm text-gray-700 dark:text-gray-300"
+                    >
+                      <span className="w-1/2">
+                        {index + 1}. {p.name} ({p.age})
+                      </span>
+
+                      <span className="w-1/2 font-medium text-right flex justify-end items-center space-x-2">
+                        <span className="text-gray-500 dark:text-gray-400">
+                          Seat:
+                        </span>
+                        {renderSeatDetails(p)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
           <p><strong>Status:</strong> {ticket.status}</p>
-          <p><strong>Amount Paid:</strong> ₹{ticket.amount}</p>
+          <p><strong>Amount Paid:</strong> ₹{ticket.total_amount}</p>
 
           {ticket.payment_id && (
             <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">

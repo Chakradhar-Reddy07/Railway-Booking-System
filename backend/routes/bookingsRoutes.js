@@ -5,7 +5,6 @@ const pool = require("../config/db");
 const auth = require("../middleware/auth");
 const { v4: uuidv4 } = require("uuid");
 
-
 router.post("/create", auth, async (req, res) => {
   let connection;
   try {
@@ -250,4 +249,45 @@ router.get("/my", auth, async (req, res) => {
     res.status(500).json({ message: "Error fetching bookings" });
   }
 });
+
+// -----------------------------------------------------
+// CANCEL TICKET (Trigger handles merging)
+// -----------------------------------------------------
+router.patch("/cancel/:ticketId", auth, async (req, res) => {
+  const ticketId = req.params.ticketId;
+  const userId = req.user.user_id;
+
+  try {
+    const [ticketRows] = await pool.query(
+      `SELECT ticket_id, status, user_id 
+       FROM tickets WHERE ticket_id = ? LIMIT 1`,
+      [ticketId]
+    );
+
+    if (ticketRows.length === 0)
+      return res.status(404).json({ message: "Ticket not found." });
+
+    const ticket = ticketRows[0];
+
+    if (ticket.user_id !== userId)
+      return res.status(403).json({ message: "Not allowed." });
+
+    if (ticket.status === "CANCELLED")
+      return res.status(400).json({ message: "Already cancelled." });
+
+    await pool.query(
+      `UPDATE tickets SET status='CANCELLED' WHERE ticket_id=?`,
+      [ticketId]
+    );
+
+    res.json({
+      message: "Ticket cancelled successfully.",
+      detail: "Seat availability restored (via trigger).",
+    });
+  } catch (err) {
+    console.error("❌ Cancel Ticket Error:", err);
+    res.status(500).json({ message: "Error cancelling ticket." });
+  }
+});
+
 module.exports = router;
