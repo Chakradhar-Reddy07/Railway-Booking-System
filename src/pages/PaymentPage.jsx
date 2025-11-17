@@ -77,7 +77,7 @@ const  handlePay = async (e) => {
             <input 
             required
             style={{ flex: 1, padding: 8 }} 
-            placeholder="CVC"
+            placeholder="CVV"
             pattern="[0-9]{3}" 
             maxLength={3} 
             />
