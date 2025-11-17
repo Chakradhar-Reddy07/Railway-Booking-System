@@ -196,9 +196,10 @@ export default function Background3D() {
         width: "100%",
         height: "100%",
         background: isDark
-          ? "linear-gradient(to bottom, #0a0a2a 0%, #000 90%)"
-          : "linear-gradient(to bottom, #e0f2ff 0%, #ffffff 90%)",
-        transition: "background 0.5s ease",
+  ? "radial-gradient(circle at center, #0f133a 0%, #000010 70%, #000 100%)"
+  : "radial-gradient(circle at center, #e9f6ff 0%, #dff1ff 50%, #ffffff 100%)",
+      transition: "background 1s ease",
+      filter: "blur(0.3px)",
       }}
       camera={{ position: [0, 0, 10], fov: 65 }}
     >

@@ -1,0 +1,154 @@
+/* ✨ Light + Dark Theme Smooth Transition */
+:root {
+  --text-primary: #002244;
+  --text-secondary: #333;
+  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-hover: rgba(255, 255, 255, 0.75);
+  --section-bg: rgba(255, 255, 255, 0.25);
+  --footer-bg: rgba(0, 25, 60, 0.95);
+  --footer-text: #dbe9ff;
+}
+
+.dark {
+  --text-primary: #e7efff;
+  --text-secondary: #b4c9ff;
+  
+  /* 🔥 MUCH brighter glass card for dark mode */
+  --card-bg: rgba(40, 40, 70, 0.55);
+  --card-hover: rgba(65, 65, 105, 0.75);
+
+  --section-bg: rgba(25, 25, 50, 0.45);
+  --footer-bg: rgba(5, 10, 25, 1);
+  --footer-text: #8fb1ff;
+}
+
+/* GLOBAL ANIMATIONS */
+.fade-in { animation: fadeIn 1s ease forwards; opacity: 0; }
+.fade-in-up { animation: fadeUp 1.1s ease forwards; opacity: 0; transform: translateY(20px); }
+
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+/* HERO SECTION */
+.hero-section {
+  padding: 80px 20px 40px;
+  text-align: center;
+}
+
+/* 🎯 FIXED THE BLUE BAR PROBLEM */
+.hero-title {
+  font-size: 42px;
+  font-weight: 700;
+  display: inline-block; /* IMPORTANT FIX */
+  background: linear-gradient(to right, #52b6ff, #7be7ff);
+  -webkit-background-clip: text;
+  color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.dark .hero-title {
+  background: linear-gradient(to right, #9cc0ff, #4fdfff);
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  margin-top: 15px;
+  color: var(--text-secondary);
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 35px;
+  color: var(--text-primary);
+}
+
+/* FEATURE GRID */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  padding: 10px 20px;
+}
+
+/* FEATURE CARD */
+.feature-card {
+  padding: 22px;
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  background: var(--card-bg);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  background: var(--card-hover);
+}
+
+/* Icons */
+.feature-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+  transition: 0.3s ease;
+}
+
+.dark .feature-icon {
+  filter: drop-shadow(0 0 8px rgba(140,180,255,0.8));
+}
+
+/* REFERENCES SECTION */
+.reference-section {
+  margin-top: 60px;
+  padding: 50px 20px;
+  background: var(--section-bg);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.ref-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.ref-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.ref-card:hover {
+  background: var(--card-hover);
+  transform: translateY(-4px) scale(1.04);
+}
+
+/* FOOTER */
+.main-footer {
+  margin-top: 60px;
+  padding: 25px 20px;
+  text-align: center;
+  background: var(--footer-bg);
+  color: var(--footer-text);
+}
+
+.footer-links a {
+  margin: 0 12px;
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}

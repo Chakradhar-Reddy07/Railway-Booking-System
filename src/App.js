@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
-//import Background3D from './components/Background3D';
+import Background3D from './components/Background3D';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ForgotPassword from './pages/ForgotPassword';
@@ -13,6 +13,7 @@ import PaymentPage from './pages/PaymentPage';
 import MyBookings from './pages/MyBookings';
 import Profile from './pages/Profile';
 import TicketsPage from './pages/TicketsPage';
+import DashboardHome from './pages/DashboardHome';
 
 function AnimatedRoutes({ setTheme, theme }) {
   const location = useLocation();
@@ -24,6 +25,7 @@ function AnimatedRoutes({ setTheme, theme }) {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/home" element={<HomePage setTheme={setTheme} theme={theme}/>}>
+        <Route index element={<DashboardHome />} />   {/* NEW */}
           <Route path="trains" element={<AvailableTrains />} />
          <Route path="confirm/:id" element={<ConfirmationPage />} />
           <Route path="payment/:ticketId" element={<PaymentPage />} />
@@ -47,7 +49,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="relative min-h-screen w-full">
-        {/* <Background3D /> */}
+        <Background3D />
         <div className="relative z-10">
           <AnimatedRoutes setTheme={setTheme} theme={theme} />
         </div>

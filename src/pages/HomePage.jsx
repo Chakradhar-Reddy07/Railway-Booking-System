@@ -1,13 +1,15 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import Navbar from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 
-export default function Home({ setTheme, theme }) {
+export default function HomePage({ setTheme, theme }) {
   return (
-    <div>
+    <div className="layout-container">
       <Navbar setTheme={setTheme} theme={theme} />
-      <div style={{padding:20}}>
-        <Outlet/>
+
+      {/* All nested pages render here */}
+      <div style={{ padding: 0 }}>
+        <Outlet />
       </div>
     </div>
   );
