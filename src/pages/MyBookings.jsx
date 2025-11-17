@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function MyBookings() {
   const [list, setList] = useState([]);
+  const [list, setList] = useState([]);
 
   const loadBookings = async () => {
     try {
@@ -94,6 +95,15 @@ export default function MyBookings() {
       >
         My Bookings
       </motion.h2>
+  return (
+    <div className="page p-6 flex flex-col items-center">
+      <motion.h2
+        className="text-3xl font-bold mb-6 text-indigo-600 dark:text-indigo-400"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        My Bookings
+      </motion.h2>
 
       <div className="grid gap-4 w-full max-w-3xl">
         {list.length === 0 ? (
@@ -111,6 +121,7 @@ export default function MyBookings() {
               <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   {t.train_name}
+                  {t.train_name}
                 </h3>
 
                 <span
@@ -124,6 +135,7 @@ export default function MyBookings() {
                 >
                   {t.status}
                 </span>
+              </div>
               </div>
 
               {/* Journey Info */}
@@ -149,7 +161,9 @@ export default function MyBookings() {
                 </div>
                 <div className="text-right text-lg font-bold text-indigo-600 dark:text-indigo-400">
                   ₹{t.total_amount}
+                  ₹{t.total_amount}
                 </div>
+              </div>
               </div>
 
               {/* Passengers */}
