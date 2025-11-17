@@ -172,7 +172,6 @@ router.get('/seat-status', auth, async (req, res) => {
 router.get('/available', async (req, res) => {
   try {
     const { from, to, date } = req.query;
-    console.log('Available trains request params:', req.query);
     if (!from || !to || !date)
       return res.status(400).json({ message: 'from, to, and date are required' });
 
@@ -187,8 +186,27 @@ router.get('/available', async (req, res) => {
           si.class_type,
           rs_from.departure_time AS from_departure,
           rs_to.arrival_time AS to_arrival,
-          COUNT(CASE WHEN ss.availability_status = 'AVAILABLE' THEN 1 END) AS available_seats,
-          COUNT(ss.seat_no) AS total_seats
+          SUM(si.total_seats) AS total_seats_in_class,
+          
+          -- CRITICAL FIX: Calculate available seats (defaults to total capacity if uninitialized)
+          (CASE
+              -- Check if ANY seat_status entry exists for this train/class/date combination
+              WHEN EXISTS (
+                  SELECT 1 FROM seat_status ss_exist
+                  WHERE ss_exist.train_id = t.train_id
+                  AND ss_exist.class_type = si.class_type
+                  AND ss_exist.travel_date = ? 
+              )
+              -- If entries EXIST, calculate available segments (will be 0 if none cover the route)
+              THEN COUNT(CASE WHEN ss.availability_status = 'AVAILABLE' 
+                              AND ss.from_seq_no <= rs_from.seq_no 
+                              AND ss.to_seq_no >= rs_to.seq_no 
+                              THEN 1 
+                         END)
+              -- If NO entries EXIST (uninitialized train/class/date), return total capacity
+              ELSE SUM(si.total_seats)
+          END) AS available_seats
+          
       FROM trains t
       JOIN route_stations rs_from 
           ON rs_from.train_id = t.train_id
@@ -196,37 +214,32 @@ router.get('/available', async (req, res) => {
           ON rs_to.train_id = t.train_id
       JOIN seat_inventory si 
           ON si.train_id = t.train_id
+      -- LEFT JOIN is used for the availability calculation (ss)
       LEFT JOIN seat_status ss 
           ON ss.train_id = t.train_id
           AND ss.class_type = si.class_type
           AND ss.coach_no = si.coach_no
-          AND ss.from_seq_no <= rs_from.seq_no
-          AND ss.to_seq_no >= rs_to.seq_no
-          AND ss.travel_date = (
-              SELECT MIN(travel_date)
-              FROM seat_status
-              WHERE train_id = t.train_id
-                AND travel_date <= ?
-          )
+          -- CRITICAL FIX: Match the requested travel date exactly
+          AND ss.travel_date = ? 
       WHERE 
           rs_from.station_id = ?
           AND rs_to.station_id = ?
           AND rs_from.seq_no < rs_to.seq_no
-          AND (rs_from.${weekday} = 1 OR rs_to.${weekday} = 1)
+          -- Only check the departure day for train running status
+          AND rs_from.${weekday} = 1  
       GROUP BY 
           t.train_id, t.train_name, si.class_type, rs_from.departure_time, rs_to.arrival_time
       ORDER BY 
           t.train_name;
     `;
-    const [rows] = await pool.query(sql, [date, from, to]);
-    console.log('Available trains query result:', rows);
+    // Pass the date parameter multiple times as required by the query: [Date for EXISTS, Date for LEFT JOIN, From, To]
+    const [rows] = await pool.query(sql, [date, date, from, to]); 
     res.json(rows);
   } catch (err) {
     console.error('Error fetching available trains:', err);
     res.status(500).json({ message: 'Error fetching available trains' });
   }
 });
-
 
 // Train details
 router.get('/:id', async (req, res) => {
